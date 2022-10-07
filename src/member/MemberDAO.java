@@ -74,13 +74,14 @@ public class MemberDAO {
 	
 	public void modi(MemberInfo m) {
 		if(connect()) {
-			String sql="update member1 set name=?, pass=?, addr=? where id=?";
+			String sql="update member1 set name=?, pass=?, addr=?, point=? where id=?";
 			try {
 				PreparedStatement psmt=conn.prepareStatement(sql);
 				psmt.setString(1, m.getName());
 				psmt.setString(2, m.getPass());
 				psmt.setString(3, m.getAddr());
-				psmt.setString(4, m.getId());
+				psmt.setInt(4, m.getPoint());
+				psmt.setString(5, m.getId());
 				int r= psmt.executeUpdate();
 				conn.close();
 			} catch (SQLException e) {
@@ -89,33 +90,36 @@ public class MemberDAO {
 			}
 		}
 	}
-	public void search(MemberInfo m) {
-		ResultSet rs=null;
-		if(connect()) {
-			String sql="select * from member1 where id=?";
-			
-			try {
-				PreparedStatement psmt=conn.prepareStatement(sql);
-				psmt.setString(1, m.getId());
+	   public void search(String id) {
+		      ResultSet rs=null;
+		      if(connect()) {
+		         String sql="select * from member1 where id like '%"+id+"%'";
+		         
+		         try {
+//		            PreparedStatement psmt=conn.prepareStatement(sql);
+//		            psmt.setString(1, "'%"+id+"%'");
+		        	 
+		        	Statement psmt=conn.createStatement();
 
-				rs=psmt.executeQuery();
-				while(rs.next()) {
-					System.out.println("이름: "+rs.getString("name"));
-					System.out.println("비밀번호: "+rs.getString("pass"));
-					System.out.println("주소: "+rs.getString("addr"));
-					System.out.println("포인트: "+rs.getInt("point"));
-					System.out.println("----------------");
+		            rs=psmt.executeQuery(sql);
+		            while(rs.next()) {
+		               System.out.println("이름: "+rs.getString("name"));
+		               System.out.println("비밀번호: "+rs.getString("pass"));
+		               System.out.println("주소: "+rs.getString("addr"));
+		               System.out.println("포인트: "+rs.getInt("point"));
+		               System.out.println("----------------");
 
-				}
+		            }
 
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-	}
+		            conn.close();
+		         } catch (SQLException e) {
+		            // TODO Auto-generated catch block
+		            e.printStackTrace();
+		         }
+		      }
+		      
+		   }
+
 	public ArrayList <MemberInfo> prt() {
 		ResultSet rs=null;
 		if(connect()) {
@@ -145,32 +149,58 @@ public class MemberDAO {
 	}
 	
 	
-	public void cheak(MemberInfo m) {
+	public int cheak(String id) { //id 체크 메서드, 수정과 입력에 사용된다.
 		ResultSet rs=null;
 		if(connect()) {
 			String sql="select id from member1 where id=?";
 			try {
 				PreparedStatement psmt=conn.prepareStatement(sql);
-				psmt.setString(1, m.getId());
+				psmt.setString(1, id);
 				rs=psmt.executeQuery();
-				while(rs.next()) {
-						return;
+				
+				if(rs.next()) { //입력한 아이디가 이미 테이블에 있을 경우
+					conn.close();
+					return 0; //0을 리턴
 				}
+				conn.close();	
+				return 1; // 입력한 아이디가 테이블에 없을 경우 1을 리턴
 			
-			m.setId(null);
-
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		return 2; //커넥션 실패시 2를 리턴
 	}
 	
 	
+	public int login(MemberInfo M) {
+		ResultSet rs=null;
+		if(connect()) {
+			String sql = "select id,pass from member1 where id=? and pass=?";
+			try {
+				PreparedStatement p1=conn.prepareStatement(sql);
+				p1.setString(1, M.getId());
+				p1.setString(2, M.getPass());
+				
+				rs=p1.executeQuery();
+				
+				if(rs.next()) {
+					conn.close();
+					return 0;
+				}
+				conn.close();
+				return 1;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return 2;
+	}
 	
 	
-	
-	
+
 	
 	
 	
