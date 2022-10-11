@@ -196,6 +196,7 @@ public class MemberDAO {
 				e.printStackTrace();
 			}
 		}
+		System.out.println("연결이 되지 않았습니다.");
 		return 2;
 	}
 	

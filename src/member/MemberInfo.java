@@ -3,22 +3,22 @@ package member;
 public class MemberInfo {
 
 	
-	private String id=null;
-	private String name=null;
+	private String mid=null;
+	private String mname=null;
 	private String pass=null;
 	private String addr=null;
 	private int point=0;
 	public String getId() {
-		return id;
+		return mid;
 	}
 	public void setId(String id) {
-		this.id = id;
+		this.mid = id;
 	}
 	public String getName() {
-		return name;
+		return mname;
 	}
 	public void setName(String name) {
-		this.name = name;
+		this.mname = name;
 	}
 	public String getPass() {
 		return pass;

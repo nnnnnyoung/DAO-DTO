@@ -1,6 +1,5 @@
 package member;
 
-import goods.GoodsManager;
 
 public class Main {
 

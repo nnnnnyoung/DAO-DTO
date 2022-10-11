@@ -18,7 +18,7 @@ public class MemberManager {
 		m.setId(id);
 		
 		if(MDAO.cheak(id)==0) {
-			System.out.println("중복 id가 있습니다.");
+			System.out.println("중복 ID가 있습니다.");
 		}else if(MDAO.cheak(id)==1) {
 			System.out.println("이름을 입력하세요");
 			String name=in.nextLine();
@@ -47,7 +47,7 @@ public class MemberManager {
 		String id=in.nextLine();
 		m.setId(id);
 		if(MDAO.cheak(id)==1) {
-			System.out.println("해당id가 없습니다.");
+			System.out.println("해당 ID가 없습니다.");
 			return;
 		}else if(MDAO.cheak(id)==0){
 			System.out.println("수정 될 이름을 입력하세요");
@@ -73,8 +73,14 @@ public class MemberManager {
 	public void del() {
 		System.out.println("삭제할 회원의 아이디를 입력하세요");
 		String id=in.nextLine();
-		MDAO.del(id);
-		System.out.println("삭제완료");
+		if(MDAO.cheak(id)==1) {
+			System.out.println("해당 ID가 없습니다.");
+			return;
+		}else if(MDAO.cheak(id)==0){
+			MDAO.del(id);
+			System.out.println("삭제완료");
+		}
+
 		
 	}
 	
@@ -122,7 +128,7 @@ public class MemberManager {
 	
 	   public void search() {
 		      MemberInfo m=new MemberInfo();
-		      System.out.println("검색할 회원의 id를 입력하세요");
+		      System.out.println("검색할 회원의 ID를 입력하세요");
 		      String id=in.nextLine();
 		      m.setId(id);
 		      MDAO.search(id);
